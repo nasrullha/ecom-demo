@@ -141,7 +141,7 @@ export interface DashboardStats {
 }
 
 /** Result type used by every server action. */
-export type ActionResult<T = Record<string, never>> =
+export type ActionResult<T = unknown> =
   | ({ ok: true } & T)
   | { ok: false; error: string };
 
