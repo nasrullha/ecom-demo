@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* Design tokens. Change these few colors to re-theme the whole shop. */
+@theme {
+  --color-canvas: #f4f5f2;
+  --color-surface: #ffffff;
+  --color-ink: #17211d;
+  --color-muted: #5b6761;
+  --color-line: #dadfd8;
+  --color-wash: #eceee9;
+  --color-brand: #0d5c4b;
+  --color-brand-strong: #0a4639;
+  --color-brand-soft: #e1eee8;
+  --color-danger: #b3361f;
+  --color-danger-soft: #fbe9e5;
+  --color-sale: #c2410c;
+}
+
+@theme inline {
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-bricolage), var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Hide the number-input spinners: they are fiddly on mobile */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* The single orchestrated motion on the site: the home headline settles in. */
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.settle {
+  animation: settle 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
