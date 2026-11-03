@@ -30,6 +30,8 @@ export function safeNextPath(next: string | null | undefined, fallback = "/"): s
 
 export function productImageUrl(path: string | null | undefined): string | null {
   if (!path) return null;
+  // Demo photos that ship with the site live in /public/demo and are stored as "/demo/..."
+  if (path.startsWith("/demo/")) return path;
   return `${SUPABASE_URL}/storage/v1/object/public/product-images/${path
     .split("/")
     .map(encodeURIComponent)
