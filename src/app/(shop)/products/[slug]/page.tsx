@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Landmark, Ship, ShieldCheck } from "lucide-react";
+import { CURRENCY } from "@/lib/env";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductGallery } from "@/components/shop/product-gallery";
@@ -49,7 +51,7 @@ export default async function ProductPage({ params }: Props) {
       "@type": "Offer",
       url: `${SITE_URL}/products/${product.slug}`,
       price: lowPrice.toFixed(2),
-      priceCurrency: process.env.NEXT_PUBLIC_CURRENCY || "USD",
+      priceCurrency: CURRENCY,
       availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
     },
   };
@@ -95,6 +97,30 @@ export default async function ProductPage({ params }: Props) {
               compareAtPrice={product.compare_at_price}
             />
           </div>
+
+          <ul className="mt-6 grid gap-3 rounded-3xl bg-gold-soft/60 p-4 text-sm ring-1 ring-gold/25 sm:grid-cols-3">
+            <li className="flex items-start gap-2.5">
+              <Ship className="mt-0.5 size-4 shrink-0 text-gold-ink" aria-hidden />
+              <span>
+                <strong className="block font-semibold">Island delivery</strong>
+                <span className="text-muted">Courier or vessel to your island</span>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <Landmark className="mt-0.5 size-4 shrink-0 text-gold-ink" aria-hidden />
+              <span>
+                <strong className="block font-semibold">BML transfer</strong>
+                <span className="text-muted">Upload your slip after ordering</span>
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <ShieldCheck className="mt-0.5 size-4 shrink-0 text-gold-ink" aria-hidden />
+              <span>
+                <strong className="block font-semibold">Checked by hand</strong>
+                <span className="text-muted">Every payment is verified</span>
+              </span>
+            </li>
+          </ul>
 
           {product.description ? (
             <section className="mt-8 border-t border-line pt-6" aria-labelledby="desc-heading">

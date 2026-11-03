@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { expireStaleOrdersAction, updateOrderStatusAction } from "@/actions/admin-orders";
-import { Alert, Button, Field, Textarea } from "@/components/ui";
+import { expireStaleOrdersAction, setDispatchAction, updateOrderStatusAction } from "@/actions/admin-orders";
+import { Alert, Button, Field, Input, Textarea } from "@/components/ui";
 import type { OrderStatus } from "@/lib/types";
 
 /** Buttons that move an order to its next allowed status. */
@@ -129,6 +129,77 @@ export function ExpireOrdersButton() {
           Close
         </Button>
       </div>
+    </div>
+  );
+}
+
+/** Admin records the vessel (or courier details) so the customer can follow the delivery. */
+export function DispatchPanel({
+  orderId,
+  method,
+  vessel: initialVessel,
+  note: initialNote,
+  disabled,
+}: {
+  orderId: string;
+  method: "courier" | "vessel";
+  vessel: string;
+  note: string;
+  disabled: boolean;
+}) {
+  const router = useRouter();
+  const [vessel, setVessel] = useState(initialVessel);
+  const [note, setNote] = useState(initialNote);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  function save() {
+    setError(null);
+    setDone(null);
+    startTransition(async () => {
+      const result = await setDispatchAction({
+        orderId,
+        vessel: vessel.trim() || undefined,
+        note: note.trim() || undefined,
+      });
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      setDone("Saved. The customer can see this on their order.");
+      router.refresh();
+    });
+  }
+
+  return (
+    <div className="space-y-3">
+      {error ? <Alert>{error}</Alert> : null}
+      {done ? <Alert tone="success">{done}</Alert> : null}
+      <Field
+        label={method === "vessel" ? "Vessel or boat name" : "Courier name (optional)"}
+        htmlFor="dispatch-vessel"
+      >
+        <Input
+          id="dispatch-vessel"
+          value={vessel}
+          onChange={(e) => setVessel(e.target.value)}
+          maxLength={100}
+          disabled={disabled}
+        />
+      </Field>
+      <Field label="Details for the customer" htmlFor="dispatch-note" hint="For example: leaves Malé Tuesday, arrives Wednesday morning.">
+        <Input
+          id="dispatch-note"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          maxLength={300}
+          disabled={disabled}
+        />
+      </Field>
+      <Button onClick={save} disabled={pending || disabled} variant="secondary">
+        Save delivery details
+      </Button>
     </div>
   );
 }

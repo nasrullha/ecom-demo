@@ -16,10 +16,11 @@ export const SITE_URL = (
     : "http://localhost:3000")
 ).replace(/\/$/, "");
 
-export const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY || "USD";
+// This store sells in Maldivian Rufiyaa. (Set NEXT_PUBLIC_STORE_CURRENCY only to override.)
+export const CURRENCY = process.env.NEXT_PUBLIC_STORE_CURRENCY || "MVR";
 
 // Used when showing dates, e.g. "Indian/Maldives", "Europe/London"
-export const TIMEZONE = process.env.NEXT_PUBLIC_TIMEZONE || "UTC";
+export const TIMEZONE = process.env.NEXT_PUBLIC_STORE_TIMEZONE || "Indian/Maldives";
 
 export function assertSupabaseEnv() {
   if (!SUPABASE_URL || !SUPABASE_KEY) {

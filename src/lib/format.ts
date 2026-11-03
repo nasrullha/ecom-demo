@@ -8,8 +8,19 @@ try {
   moneyFormatter = null; // unknown currency code: fall back to "CODE 12.00"
 }
 
+/**
+ * Money as shown to customers. Maldivian Rufiyaa is written "MVR 1,250" (no
+ * decimals when the amount is whole) or "MVR 1,250.50".
+ */
 export function formatMoney(value: number | null | undefined): string {
   const n = Number(value ?? 0);
+  if (CURRENCY === "MVR") {
+    const whole = Math.abs(n - Math.round(n)) < 0.005;
+    return `MVR ${n.toLocaleString("en-US", {
+      minimumFractionDigits: whole ? 0 : 2,
+      maximumFractionDigits: 2,
+    })}`;
+  }
   return moneyFormatter ? moneyFormatter.format(n) : `${CURRENCY} ${n.toFixed(2)}`;
 }
 

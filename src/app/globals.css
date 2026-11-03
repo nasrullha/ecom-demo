@@ -2,23 +2,35 @@
 
 /* Design tokens. Change these few colors to re-theme the whole shop. */
 @theme {
-  --color-canvas: #f4f5f2;
+  --color-canvas: #fbf9f6;
   --color-surface: #ffffff;
-  --color-ink: #17211d;
-  --color-muted: #5b6761;
-  --color-line: #dadfd8;
-  --color-wash: #eceee9;
-  --color-brand: #0d5c4b;
-  --color-brand-strong: #0a4639;
-  --color-brand-soft: #e1eee8;
+  --color-ink: #12171b;
+  --color-muted: #5c666e;
+  --color-line: #e8e2d9;
+  --color-wash: #f3efe8;
+  /* lagoon: the main brand color (deep ocean teal) */
+  --color-brand: #0b6b7a;
+  --color-brand-strong: #084f5b;
+  --color-brand-soft: #e2f2f2;
+  --color-lagoon-deep: #072f38;
+  /* coral: warm accent for sales and highlights */
+  --color-coral: #ff6b57;
+  --color-coral-soft: #ffe6df;
+  --color-sale: #d4452f;
+  /* champagne gold: small premium touches only */
+  --color-gold: #c9a66b;
+  --color-gold-soft: #f4ead6;
+  --color-gold-ink: #7a5d2b;
   --color-danger: #b3361f;
   --color-danger-soft: #fbe9e5;
-  --color-sale: #c2410c;
+  --shadow-soft: 0 1px 2px rgb(18 23 27 / 0.04), 0 8px 24px -8px rgb(18 23 27 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(18 23 27 / 0.05), 0 18px 40px -12px rgb(18 23 27 / 0.22);
 }
 
 @theme inline {
   --font-sans: var(--font-hanken), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: var(--font-bricolage), var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
 }
 
 html {
@@ -88,4 +100,65 @@ input[type="number"] {
 }
 .settle {
   animation: settle 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* ---- Maldivian visual language: soft lagoon light, wave lines, coral lattice ---- */
+
+/* serif italic accent used on one word of a headline */
+.accent-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Soft gradient wash behind the hero: lagoon top-right, coral bottom-left */
+.hero-wash {
+  background:
+    radial-gradient(60% 55% at 88% 8%, rgb(124 200 201 / 0.55), transparent 70%),
+    radial-gradient(50% 50% at 4% 92%, rgb(255 138 115 / 0.28), transparent 70%),
+    radial-gradient(40% 40% at 55% 100%, rgb(201 166 107 / 0.22), transparent 70%);
+}
+
+/* Faint coral-stone lattice (4 to 6 percent opacity): hero and footer only */
+.lattice {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cpath d='M28 4l24 24-24 24L4 28z M28 14l14 14-14 14L14 28z' fill='none' stroke='%230b6b7a' stroke-width='1' stroke-opacity='0.07'/%3E%3C/svg%3E");
+  background-size: 56px 56px;
+}
+
+/* Wave line divider */
+.wave-rule {
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='12' viewBox='0 0 48 12'%3E%3Cpath d='M0 6 Q12 0 24 6 T48 6' fill='none' stroke='%23c9a66b' stroke-width='1.2' stroke-opacity='0.7'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+/* Frosted glass used by the sticky header and floating chips */
+.glass {
+  background: rgb(255 255 255 / 0.78);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
+}
+
+.bg-ocean {
+  background: linear-gradient(160deg, #1b8c9b 0%, #0b6b7a 45%, #072f38 100%);
+}
+.bg-sunset {
+  background: linear-gradient(150deg, #ff8a73 0%, #ff6b57 45%, #c9486a 100%);
+}
+.bg-sand {
+  background: linear-gradient(150deg, #e9d7b0 0%, #c9a66b 60%, #9c7a43 100%);
+}
+.bg-reef {
+  background: linear-gradient(150deg, #3c4a52 0%, #1b242a 100%);
+}
+
+/* gentle float for the hero collage; motion is switched off by reduced-motion above */
+@keyframes drift {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-8px) rotate(var(--r, 0deg)); }
+}
+.drift {
+  animation: drift 7s ease-in-out infinite;
 }

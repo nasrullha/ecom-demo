@@ -11,12 +11,15 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
   const soldOut = product.total_stock <= 0;
   const onSale =
     product.compare_at_price !== null && product.compare_at_price > product.min_price && product.min_price === product.max_price;
+  const discount = onSale && product.compare_at_price
+    ? Math.round((1 - product.min_price / product.compare_at_price) * 100)
+    : 0;
   const sizes = "(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw";
 
   return (
     <article className="group">
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-wash">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-wash shadow-soft ring-1 ring-black/[0.04] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lift">
           {first ? (
             <>
               <Image
@@ -25,7 +28,7 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
                 fill
                 sizes={sizes}
                 priority={priority}
-                className="object-cover transition-opacity duration-300"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
               {second ? (
                 <Image
@@ -44,16 +47,22 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
             </div>
           )}
           {soldOut ? (
-            <span className="absolute left-2 top-2 rounded-md bg-ink px-2 py-0.5 text-xs font-medium text-white">Sold out</span>
+            <span className="absolute left-3 top-3 rounded-full bg-ink px-2.5 py-1 text-xs font-medium text-white">Sold out</span>
           ) : onSale ? (
-            <span className="absolute left-2 top-2 rounded-md bg-sale px-2 py-0.5 text-xs font-medium text-white">Sale</span>
+            <span className="absolute left-3 top-3 rounded-full bg-coral px-2.5 py-1 text-xs font-semibold text-white">
+              {discount > 0 ? `-${discount}%` : "Sale"}
+            </span>
+          ) : product.is_featured ? (
+            <span className="absolute left-3 top-3 rounded-full bg-gold-soft px-2.5 py-1 text-xs font-medium text-gold-ink">
+              Island favourite
+            </span>
           ) : null}
         </div>
-        <div className="mt-3 space-y-0.5">
-          {product.category_name ? <p className="text-xs text-muted">{product.category_name}</p> : null}
-          <h3 className="font-sans text-sm font-medium leading-snug tracking-normal group-hover:underline">
-            {product.name}
-          </h3>
+        <div className="mt-3.5 space-y-1 px-1">
+          {product.category_name ? (
+            <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted">{product.category_name}</p>
+          ) : null}
+          <h3 className="font-sans text-[15px] font-medium leading-snug tracking-normal">{product.name}</h3>
           <Price min={product.min_price} max={product.max_price} compareAt={product.compare_at_price} className="text-sm" />
         </div>
       </Link>
@@ -63,7 +72,7 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
 
 export function ProductGrid({ products }: { products: ProductCardData[] }) {
   return (
-    <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4">
       {products.map((p, i) => (
         <li key={p.id}>
           <ProductCard product={p} priority={i < 4} />

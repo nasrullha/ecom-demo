@@ -8,7 +8,7 @@ type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-brand text-white hover:bg-brand-strong disabled:bg-brand/50",
+  primary: "bg-brand text-white shadow-soft hover:bg-brand-strong disabled:bg-brand/50",
   secondary: "bg-surface text-ink ring-1 ring-inset ring-line hover:bg-wash disabled:text-muted",
   ghost: "text-ink hover:bg-wash disabled:text-muted",
   danger: "bg-danger text-white hover:bg-danger/90 disabled:bg-danger/50",
@@ -22,7 +22,7 @@ const sizes: Record<Size, string> = {
 
 export function buttonClasses(variant: Variant = "primary", size: Size = "md", className?: string) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-lg font-medium whitespace-nowrap transition-colors disabled:cursor-not-allowed",
+    "inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-colors disabled:cursor-not-allowed",
     variants[variant],
     sizes[size],
     className
@@ -51,7 +51,7 @@ export function ButtonLink({
 /* --------------------------------------------------------------- forms */
 
 const fieldBase =
-  "w-full rounded-lg bg-surface px-3 text-sm text-ink ring-1 ring-inset ring-line placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-brand disabled:bg-wash disabled:text-muted";
+  "w-full rounded-xl bg-surface px-3.5 text-sm text-ink ring-1 ring-inset ring-line placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-brand disabled:bg-wash disabled:text-muted";
 
 export function Input({ className, ...props }: ComponentProps<"input">) {
   return <input className={cn(fieldBase, "h-10", className)} {...props} />;
@@ -105,13 +105,13 @@ export function Checkbox({
 /* ------------------------------------------------------------- display */
 
 export function Card({ className, ...props }: ComponentProps<"div">) {
-  return <div className={cn("rounded-xl bg-surface ring-1 ring-line", className)} {...props} />;
+  return <div className={cn("rounded-2xl bg-surface shadow-soft ring-1 ring-black/[0.04]", className)} {...props} />;
 }
 
 export function Badge({ className, ...props }: ComponentProps<"span">) {
   return (
     <span
-      className={cn("inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium", className)}
+      className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium", className)}
       {...props}
     />
   );
@@ -148,7 +148,7 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center rounded-xl bg-surface px-6 py-14 text-center ring-1 ring-line">
+    <div className="flex flex-col items-center rounded-3xl bg-surface px-6 py-14 text-center shadow-soft ring-1 ring-black/[0.04]">
       <h2 className="text-lg font-semibold">{title}</h2>
       {children ? <p className="mt-1 max-w-md text-sm text-muted">{children}</p> : null}
       {action ? <div className="mt-5">{action}</div> : null}

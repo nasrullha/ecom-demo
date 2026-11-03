@@ -203,6 +203,13 @@ create table if not exists public.orders (
   updated_at           timestamptz not null default now()
 );
 
+-- Maldives delivery details (added after the first release; safe to re-run)
+alter table public.orders add column if not exists shipping_atoll text check (shipping_atoll is null or char_length(shipping_atoll) <= 60);
+alter table public.orders add column if not exists delivery_method text not null default 'courier' check (delivery_method in ('courier', 'vessel'));
+alter table public.orders add column if not exists preferred_vessel text check (preferred_vessel is null or char_length(preferred_vessel) <= 100);
+alter table public.orders add column if not exists vessel_name text check (vessel_name is null or char_length(vessel_name) <= 100);
+alter table public.orders add column if not exists dispatch_note text check (dispatch_note is null or char_length(dispatch_note) <= 300);
+
 create index if not exists orders_user_idx on public.orders (user_id, created_at desc);
 create index if not exists orders_status_idx on public.orders (status, created_at desc);
 
@@ -437,6 +444,9 @@ declare
   v_city      text := btrim(coalesce(p_shipping ->> 'city', ''));
   v_postal    text := nullif(btrim(coalesce(p_shipping ->> 'postal_code', '')), '');
   v_note      text := nullif(btrim(coalesce(p_shipping ->> 'note', '')), '');
+  v_atoll     text := btrim(coalesce(p_shipping ->> 'atoll', ''));
+  v_method    text := coalesce(nullif(btrim(coalesce(p_shipping ->> 'delivery_method', '')), ''), 'courier');
+  v_vessel    text := nullif(btrim(coalesce(p_shipping ->> 'vessel', '')), '');
 begin
   if v_uid is null then
     raise exception 'Please sign in to place an order.' using errcode = '28000';
@@ -447,7 +457,10 @@ begin
      or char_length(v_address) not between 1 and 300
      or char_length(v_city) not between 1 and 100
      or char_length(coalesce(v_postal, '')) > 20
-     or char_length(coalesce(v_note, '')) > 500 then
+     or char_length(coalesce(v_note, '')) > 500
+     or char_length(v_atoll) not between 1 and 60
+     or v_method not in ('courier', 'vessel')
+     or char_length(coalesce(v_vessel, '')) > 100 then
     raise exception 'Please check your delivery details.';
   end if;
 
@@ -467,8 +480,10 @@ begin
   select * into v_settings from public.store_settings limit 1;
 
   insert into public.orders (user_id, shipping_name, shipping_phone, shipping_address,
-                             shipping_city, shipping_postal_code, customer_note)
-  values (v_uid, v_name, v_phone, v_address, v_city, v_postal, v_note)
+                             shipping_city, shipping_postal_code, customer_note,
+                             shipping_atoll, delivery_method, preferred_vessel)
+  values (v_uid, v_name, v_phone, v_address, v_city, v_postal, v_note,
+          v_atoll, v_method, v_vessel)
   returning id into v_order_id;
 
   -- merge duplicate lines, lock rows in a stable order to avoid deadlocks
@@ -635,6 +650,28 @@ begin
   values (p_order_id, v_order.status, p_status, v_note, v_uid);
 end $$;
 
+-- Admin records which vessel (or courier) an order left on. The customer sees it.
+create or replace function public.admin_set_dispatch(p_order_id uuid, p_vessel text, p_note text default null)
+returns void language plpgsql security definer set search_path = '' as $$
+declare
+  v_vessel text := nullif(btrim(coalesce(p_vessel, '')), '');
+  v_note   text := nullif(btrim(coalesce(p_note, '')), '');
+begin
+  if not public.is_admin() then
+    raise exception 'Not allowed.' using errcode = '42501';
+  end if;
+  if char_length(coalesce(v_vessel, '')) > 100 or char_length(coalesce(v_note, '')) > 300 then
+    raise exception 'The vessel name or note is too long.';
+  end if;
+  update public.orders set vessel_name = v_vessel, dispatch_note = v_note where id = p_order_id;
+  if not found then
+    raise exception 'Order not found.';
+  end if;
+  insert into public.order_events (order_id, from_status, to_status, note, actor_id)
+  select id, status, status, 'Delivery details: ' || coalesce(v_vessel, 'no vessel') || coalesce(' - ' || v_note, ''), (select auth.uid())
+  from public.orders where id = p_order_id;
+end $$;
+
 -- Release stock held by orders that were never paid. Admin button on the
 -- Orders page calls this; it can also be scheduled (see bottom of this file).
 create or replace function public.expire_stale_orders(p_hours integer default 72)
@@ -734,6 +771,7 @@ grant execute on function public.cancel_my_order(uuid) to authenticated;
 grant execute on function public.admin_update_order_status(uuid, public.order_status, text) to authenticated;
 grant execute on function public.expire_stale_orders(integer) to authenticated;
 grant execute on function public.admin_dashboard_stats() to authenticated;
+grant execute on function public.admin_set_dispatch(uuid, text, text) to authenticated;
 -- internal helpers: not callable from the app at all
 revoke execute on function public.restore_order_stock(uuid) from authenticated;
 revoke execute on function public.handle_new_user() from authenticated;

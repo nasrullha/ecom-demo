@@ -66,7 +66,10 @@ export const shippingSchema = z.object({
     .max(30)
     .regex(/^[0-9+()\-\s]+$/, "Phone can only contain digits, spaces and + - ( )"),
   address: z.string().trim().min(1, "Enter the delivery address").max(300),
-  city: z.string().trim().min(1, "Enter the city or island").max(100),
+  city: z.string().trim().min(1, "Enter your island or area").max(100),
+  atoll: z.string().trim().min(1, "Choose your atoll or area").max(60),
+  deliveryMethod: z.enum(["courier", "vessel"]),
+  vessel: z.string().trim().max(100, "Vessel name must be 100 characters or fewer").optional(),
   postalCode: z.string().trim().max(20).optional(),
   note: z.string().trim().max(500, "Note must be 500 characters or fewer").optional(),
 });
@@ -133,4 +136,10 @@ export const orderStatusSchema = z.object({
   orderId: z.string().uuid(),
   status: z.enum(["pending", "slip_uploaded", "approved", "delivered", "rejected"]),
   note: z.string().trim().max(500, "The note must be 500 characters or fewer").optional(),
+});
+
+export const dispatchSchema = z.object({
+  orderId: z.string().uuid(),
+  vessel: z.string().trim().max(100, "Vessel name must be 100 characters or fewer").optional(),
+  note: z.string().trim().max(300, "The note must be 300 characters or fewer").optional(),
 });

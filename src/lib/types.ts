@@ -97,6 +97,11 @@ export interface Order {
   shipping_address: string;
   shipping_city: string;
   shipping_postal_code: string | null;
+  shipping_atoll: string | null;
+  delivery_method: "courier" | "vessel";
+  preferred_vessel: string | null;
+  vessel_name: string | null;
+  dispatch_note: string | null;
   customer_note: string | null;
   slip_path: string | null;
   slip_uploaded_at: string | null;

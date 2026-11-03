@@ -135,10 +135,29 @@ export default async function OrderPage({ params, searchParams }: Props) {
                 <p>{order.shipping_address}</p>
                 <p>
                   {order.shipping_city}
+                  {order.shipping_atoll ? `, ${order.shipping_atoll}` : ""}
                   {order.shipping_postal_code ? ` ${order.shipping_postal_code}` : ""}
                 </p>
                 <p>{order.shipping_phone}</p>
               </address>
+              <p className="mt-3 rounded-2xl bg-brand-soft p-3 text-sm text-brand-strong">
+                <span className="font-semibold">{order.delivery_method === "vessel" ? "By vessel" : "By courier"}</span>
+                {order.vessel_name ? (
+                  <>
+                    {": "}
+                    <span className="font-semibold">{order.vessel_name}</span>
+                    {order.dispatch_note ? `. ${order.dispatch_note}` : ""}
+                  </>
+                ) : order.delivery_method === "vessel" ? (
+                  <>
+                    {". "}
+                    {order.preferred_vessel ? `You asked for ${order.preferred_vessel}. ` : ""}
+                    We will show the vessel name here when your order leaves.
+                  </>
+                ) : (
+                  ". We call before arriving."
+                )}
+              </p>
               {order.customer_note ? <p className="mt-3 text-sm text-muted">Your note: {order.customer_note}</p> : null}
             </Card>
             <Card className="p-5">

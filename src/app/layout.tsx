@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Hanken_Grotesk } from "next/font/google";
+import { Bricolage_Grotesque, Hanken_Grotesk, Instrument_Serif } from "next/font/google";
 import { SITE_URL } from "@/lib/env";
 import { getSettings } from "@/lib/queries";
 import "./globals.css";
@@ -16,6 +16,14 @@ const body = Hanken_Grotesk({
   display: "swap",
 });
 
+const accent = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: "italic",
+  variable: "--font-instrument",
+  display: "swap",
+});
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
   return {
@@ -29,12 +37,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f4f5f2",
+  themeColor: "#fbf9f6",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${accent.variable}`}>
       <body className="min-h-dvh antialiased">{children}</body>
     </html>
   );

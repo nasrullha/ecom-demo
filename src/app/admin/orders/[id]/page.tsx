@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ImageOff } from "lucide-react";
-import { OrderStatusPanel } from "@/components/admin/order-actions";
+import { DispatchPanel, OrderStatusPanel } from "@/components/admin/order-actions";
 import { OrderStatusBadge, OrderTimeline } from "@/components/order-parts";
 import { Alert, Card } from "@/components/ui";
 import { formatDateTime, formatMoney } from "@/lib/format";
@@ -110,7 +110,12 @@ export default async function AdminOrderPage({ params }: Props) {
                 <p className="mt-2 text-muted">{order.shipping_address}</p>
                 <p className="text-muted">
                   {order.shipping_city}
+                  {order.shipping_atoll ? `, ${order.shipping_atoll}` : ""}
                   {order.shipping_postal_code ? ` ${order.shipping_postal_code}` : ""}
+                </p>
+                <p className="mt-1 text-muted">
+                  Delivery: {order.delivery_method === "vessel" ? "by vessel" : "by courier"}
+                  {order.preferred_vessel ? ` (customer asked for ${order.preferred_vessel})` : ""}
                 </p>
                 <p className="text-muted">{order.shipping_phone}</p>
               </address>
@@ -147,6 +152,17 @@ export default async function AdminOrderPage({ params }: Props) {
             ) : (
               <p className="text-sm text-muted">The customer has not uploaded a slip yet.</p>
             )}
+          </Card>
+
+          <Card className="p-5">
+            <h2 className="mb-3 text-lg font-semibold">Delivery and vessel</h2>
+            <DispatchPanel
+              orderId={order.id}
+              method={order.delivery_method}
+              vessel={order.vessel_name ?? ""}
+              note={order.dispatch_note ?? ""}
+              disabled={order.status === "rejected"}
+            />
           </Card>
 
           <Card className="p-5">

@@ -18,7 +18,7 @@ export function ProductGallery({
 
   return (
     <div className="space-y-3">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-wash">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-wash shadow-soft">
         {url ? (
           <Image
             key={current.id}
@@ -49,7 +49,7 @@ export function ProductGallery({
                   aria-label={`Show photo ${i + 1} of ${images.length}`}
                   aria-current={i === index}
                   className={cn(
-                    "relative block aspect-square w-full overflow-hidden rounded-lg bg-wash ring-2 transition",
+                    "relative block aspect-square w-full overflow-hidden rounded-2xl bg-wash ring-2 transition",
                     i === index ? "ring-brand" : "ring-transparent hover:ring-line"
                   )}
                 >
