@@ -122,7 +122,7 @@ input[type="number"] {
 
 /* Faint coral-stone lattice (4 to 6 percent opacity): hero and footer only */
 .lattice {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cpath d='M28 4l24 24-24 24L4 28z M28 14l14 14-14 14L14 28z' fill='none' stroke='%230b6b7a' stroke-width='1' stroke-opacity='0.07'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cpath d='M28 4l24 24-24 24L4 28z M28 14l14 14-14 14L14 28z' fill='none' stroke='%230b6b7a' stroke-width='1' stroke-opacity='0.035'/%3E%3C/svg%3E");
   background-size: 56px 56px;
 }
 
