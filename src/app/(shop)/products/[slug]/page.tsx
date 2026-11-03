@@ -109,7 +109,7 @@ export default async function ProductPage({ params }: Props) {
             <li className="flex items-start gap-2.5">
               <Landmark className="mt-0.5 size-4 shrink-0 text-gold-ink" aria-hidden />
               <span>
-                <strong className="block font-semibold">BML transfer</strong>
+                <strong className="block font-semibold">Bank transfer</strong>
                 <span className="text-muted">Upload your slip after ordering</span>
               </span>
             </li>

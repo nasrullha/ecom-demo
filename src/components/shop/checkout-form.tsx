@@ -186,15 +186,15 @@ export function CheckoutForm({
         <Card className="space-y-4 p-5 sm:p-6">
           <StepTitle n={3} title="How will you pay?" />
           <label className="flex cursor-pointer items-start gap-3 rounded-2xl p-4 ring-2 ring-brand">
-            <input type="radio" name="paymentMethod" value="bml_transfer" defaultChecked className="mt-1 size-4 accent-brand" />
+            <input type="radio" name="paymentMethod" value="bank_transfer" defaultChecked className="mt-1 size-4 accent-brand" />
             <span className="flex-1">
               <span className="flex items-center gap-2 font-semibold">
                 <Landmark className="size-4 text-brand" aria-hidden />
-                Bank of Maldives (BML) transfer
+                Bank transfer from any bank
               </span>
               <span className="mt-1 block text-sm text-muted">
                 After you place the order you will see our account details and your order reference. Transfer the total
-                from the BML app or internet banking, then upload a photo of the receipt on your order page. We keep your
+                from your own bank's app or internet banking (any bank in the Maldives works), then upload a photo of the receipt on your order page. We keep your
                 items reserved while we wait.
               </span>
             </span>

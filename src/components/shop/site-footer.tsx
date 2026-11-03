@@ -15,7 +15,7 @@ export async function SiteFooter() {
             Carefully chosen products, delivered to your island. We check every payment by hand so your order is safe.
           </p>
           <p className="mt-5 inline-flex rounded-full border border-gold/40 px-3 py-1 text-xs text-gold">
-            Bank transfer: Bank of Maldives
+            Pay from any Maldivian bank
           </p>
         </div>
         <nav aria-label="Shop">

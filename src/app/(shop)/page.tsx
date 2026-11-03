@@ -129,8 +129,8 @@ export default async function HomePage() {
               <span className="accent-serif text-brand">beautifully</span> delivered.
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-              Curated things at honest prices, sent to your atoll and island. Pay by simple Bank of Maldives transfer
-              and upload your slip. We handle the rest.
+              Curated things at honest prices, sent to your atoll and island. Pay by simple bank transfer from any
+              Maldivian bank and upload your slip. We handle the rest.
             </p>
 
             <form action="/products" role="search" className="mt-8 flex max-w-lg items-center gap-2 rounded-full bg-white p-1.5 shadow-lift ring-1 ring-black/5">
@@ -284,7 +284,7 @@ export default async function HomePage() {
           <ol className="grid gap-3">
             {[
               { icon: PackageCheck, title: "Place your order", text: "Choose items and enter your island and delivery details. Stock is reserved at once." },
-              { icon: Landmark, title: "Pay by BML transfer", text: "Transfer the total, then upload a photo of your payment slip on your order page." },
+              { icon: Landmark, title: "Pay by bank transfer", text: "Transfer the total, then upload a photo of your payment slip on your order page." },
               { icon: ShieldCheck, title: "We confirm and dispatch", text: "We check your payment by hand, approve the order and send it on its way." },
             ].map(({ icon: Icon, title, text }, i) => (
               <li key={title} className="flex gap-4 rounded-2xl bg-white/10 p-4 ring-1 ring-white/15 backdrop-blur-sm">
@@ -321,7 +321,7 @@ export default async function HomePage() {
         <div className="wave-rule mb-10" aria-hidden />
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: Landmark, title: "Bank of Maldives", text: "Simple bank transfer, no card needed." },
+            { icon: Landmark, title: "Any Maldivian bank", text: "Transfer from your own bank app, no card needed." },
             { icon: ShieldCheck, title: "Payments checked by hand", text: "Every slip is reviewed before dispatch." },
             { icon: Ship, title: "Vessel delivery", text: "We tell you the vessel name for your island." },
             { icon: PackageCheck, title: "Easy cancel", text: "Cancel any unpaid order and stock is released." },

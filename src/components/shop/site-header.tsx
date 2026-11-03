@@ -30,7 +30,7 @@ export async function SiteHeader() {
         <p className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-4 py-1.5 text-center text-xs sm:text-[13px]">
           <Truck className="size-3.5 shrink-0 text-gold" aria-hidden />
           <span>
-            Delivery to every atoll and island <span className="mx-1 text-white/40">|</span> Pay by BML bank transfer
+            Delivery to every atoll and island <span className="mx-1 text-white/40">|</span> Pay by bank transfer from any bank
           </span>
         </p>
       </div>
